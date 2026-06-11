@@ -2,6 +2,10 @@ import { Link } from 'react-router-dom';
 import { SolarPanel, HardHat, Sprout, Plane, GraduationCap, Users, Sparkles, ArrowRight, BookOpen, Clock, Award } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import type { ClassDto } from '@/data/types';
+import { getClasses } from '@/services/classService';
+import { useEffect, useState } from 'react';
+
 
 const faculties = [
   {
@@ -98,6 +102,23 @@ const faculties = [
 ];
 
 export function ProgrammesPage() {
+
+  const [classes, setClasses] = useState<ClassDto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getClasses()
+      .then(setClasses)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    console.log('Classes loaded:', classes);
+  }, [classes]);
+
+
   return (
     <div className="bg-white">
       {/* Hero */}
@@ -118,39 +139,37 @@ export function ProgrammesPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {faculties.map((faculty) => (
+            {classes.map((faculty) => (
               <Link 
-                key={faculty.id} 
-                to={`/faculty/${faculty.slug}`}
+                key={faculty.Id} 
+                to={`/faculty/${faculty.Slug}`}
                 className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-100"
               >
                 <div className="h-48 overflow-hidden relative">
                   <img 
-                    src={faculty.image} 
-                    alt={faculty.title} 
+                    src={faculty.Image} 
+                    alt={faculty.Title} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-4 left-4 text-white">
-                    <faculty.icon className="w-8 h-8 mb-2" />
-                    <h3 className="font-bold text-lg">{faculty.shortTitle}</h3>
+                    <h3 className="font-bold text-lg">{faculty.ShortTitle}</h3>
                   </div>
                 </div>
                 <div className="p-6">
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{faculty.description}</p>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{faculty.Description}</p>
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-4">
                       <span className="flex items-center gap-1 text-gray-500">
-                        <BookOpen size={14} /> {faculty.courses} courses
                       </span>
                       <span className="flex items-center gap-1 text-gray-500">
-                        <Clock size={14} /> {faculty.duration}
+                        <Clock size={14} /> {faculty.Duration}
                       </span>
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t flex items-center justify-between">
-                    <Badge style={{ backgroundColor: faculty.color + '20', color: faculty.color, borderColor: faculty.color }} variant="outline">
-                      {faculty.levels}
+                    <Badge style={{ backgroundColor: '#8bc34a', color: 'white', borderColor: 'white' }} variant="outline">
+                      {faculty.Levels}
                     </Badge>
                     <span className="text-[#2d8a5e] font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
                       View Courses <ArrowRight size={14} />
