@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { ClassDto } from '@/data/types';
 import { getClasses } from '@/services/classService';
 import { useEffect, useState } from 'react';
+import { faculties } from '@/data/courses';
 
 
 // const faculties = [
@@ -137,7 +138,7 @@ export function ProgrammesPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#1e3a5f] mb-3">7 Faculties, 50+ Qualifications</h2>
+            <h2 className="text-3xl font-bold text-[#1e3a5f] mb-3">{classes.length} Faculties, 50+ Qualifications</h2>
             <p className="text-gray-600">Choose from a wide range of career-focused programmes</p>
           </div>
 
