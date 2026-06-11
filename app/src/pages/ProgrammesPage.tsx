@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { ClassDto } from '@/data/types';
 import { getClasses } from '@/services/classService';
 import { useEffect, useState } from 'react';
-import { faculties } from '@/data/courses';
 
 
 // const faculties = [
