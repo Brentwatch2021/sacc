@@ -130,173 +130,29 @@ export function FacultyPage() {
   const { slug } = useParams<{ slug: string }>();
   const info = facultyInfo[slug || ''];
   const courses = allCourses[slug || ''] || [];
-  const [demoOpen, setDemoOpen] = useState(false);
-  const [simRunning, setSimRunning] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  
 
-  useEffect(() => {
-    if (!demoOpen || !simRunning) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+// const [faculties, setFaculties] = useState<ClassDto[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
 
-    const dpr = window.devicePixelRatio || 1;
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
+//   useEffect(() => {
+//     getFaculties()
+//       .then(setFaculties)
+//       .catch((errr) => setError(errr.message))
+//       .finally(() => setLoading(false));
+//   }, []);
 
-    resize();
-    let t = 0;
-    let frame = 0;
+//   useEffect(() => {
+//     console.log('Faculties loaded:', faculties);
+//   }, [faculties]);
 
-    const drawDrone = (x: number, y: number) => {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.fillStyle = '#1f78b4';
-      ctx.strokeStyle = '#0b3e6f';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(-18, -10);
-      ctx.lineTo(18, -10);
-      ctx.quadraticCurveTo(24, -10, 24, -4);
-      ctx.lineTo(24, 4);
-      ctx.quadraticCurveTo(24, 10, 18, 10);
-      ctx.lineTo(-18, 10);
-      ctx.quadraticCurveTo(-24, 10, -24, 4);
-      ctx.lineTo(-24, -4);
-      ctx.quadraticCurveTo(-24, -10, -18, -10);
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
+//   if (loading) return <div>Loading Faculties...</div>;
+//   if (error) return <div>Error: {error}</div>;
 
-      ctx.beginPath();
-      ctx.moveTo(-18, 0);
-      ctx.lineTo(-34, -10);
-      ctx.lineTo(-34, 10);
-      ctx.closePath();
-      ctx.fill();
+  
 
-      ctx.fillStyle = '#f0f5ff';
-      ctx.beginPath();
-      ctx.ellipse(0, -10, 10, 4, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      for (let i = -1; i <= 1; i += 2) {
-        ctx.save();
-        ctx.translate(i * 20, 0);
-        ctx.rotate((t * 12 * Math.PI) / 180);
-        ctx.fillStyle = 'rgba(255,255,255,0.75)';
-        ctx.fillRect(-2, -18, 4, 24);
-        ctx.restore();
-      }
-      ctx.restore();
-    };
-
-      const draw = () => {
-      const width = canvas.width / dpr;
-      const height = canvas.height / dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, width, height);
-
-      const sky = ctx.createLinearGradient(0, 0, 0, height);
-      sky.addColorStop(0, '#6fc3ff');
-      sky.addColorStop(0.55, '#b9e3ff');
-      sky.addColorStop(1, '#e8f6ff');
-      ctx.fillStyle = sky;
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.fillStyle = '#d9ebff';
-      ctx.fillRect(0, height * 0.55, width, height * 0.45);
-
-      ctx.fillStyle = '#8cc1ff';
-      ctx.fillRect(0, height * 0.5, width, height * 0.05);
-
-      ctx.fillStyle = 'rgba(255,255,255,0.35)';
-      for (let x = 0; x < width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, height * 0.6);
-        ctx.lineTo(x + 20, height * 0.65);
-        ctx.stroke();
-      }
-
-      const routeY = height * 0.28;
-      const routeStart = width * 0.12;
-      const routeEnd = width * 0.88;
-      ctx.strokeStyle = '#ffdd57';
-      ctx.lineWidth = 4;
-      ctx.setLineDash([14, 10]);
-      ctx.beginPath();
-      ctx.moveTo(routeStart, routeY);
-      for (let i = 1; i <= 5; i += 1) {
-        const px = routeStart + ((routeEnd - routeStart) * i) / 5;
-        const py = routeY + Math.sin((i + t) * 0.9) * 18;
-        ctx.lineTo(px, py);
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      for (let i = 0; i <= 5; i += 1) {
-        const px = routeStart + ((routeEnd - routeStart) * i) / 5;
-        const py = routeY + Math.sin((i + t) * 0.9) * 18;
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#0b3e6f';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(px, py, 10, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = '#0b3e6f';
-        ctx.fillRect(px - 2, py - 6, 4, 12);
-      }
-
-      const droneX = routeStart + (routeEnd - routeStart) * ((Math.sin(t * 0.4) + 1) / 2);
-      const droneY = routeY + Math.sin(t * 1.4) * 18 - 24;
-      ctx.fillStyle = 'rgba(30,58,95,0.16)';
-      ctx.beginPath();
-      ctx.ellipse(droneX, droneY + 22, 40, 10, 0, 0, Math.PI * 2);
-      ctx.fill();
-      drawDrone(droneX, droneY);
-
-      ctx.fillStyle = '#1e3a5f';
-      ctx.font = '600 18px Inter, sans-serif';
-      ctx.fillText('RPAS Training Simulation', 22, 34);
-      ctx.font = '12px Inter, sans-serif';
-      ctx.fillText('A live pre-flight inspection and mapping route.', 22, 54);
-
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.fillRect(width - 190, height - 62, 170, 42);
-      ctx.fillStyle = '#0b3e6f';
-      ctx.font = '500 11px Inter, sans-serif';
-      ctx.fillText('Target inspection zone', width - 176, height - 42);
-      ctx.strokeStyle = '#0b3e6f';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.arc(width - 80, height - 28, 14, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(width - 80, height - 22);
-      ctx.lineTo(width - 80, height - 10);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(width - 80, height - 14, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      t += 0.04;
-      frame = requestAnimationFrame(draw);
-    };
-    draw();
-
-    window.addEventListener('resize', resize);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener('resize', resize);
-    };
-  }, [demoOpen, simRunning]);
-
+      
   if (!info) {
     return <div className="py-20 text-center"><h1 className="text-2xl font-bold">Faculty not found</h1></div>;
   }
@@ -340,13 +196,12 @@ export function FacultyPage() {
                     <Card
                       key={i}
                       className={`hover:shadow-lg transition-shadow ${isDemoCourse ? 'cursor-pointer ring-1 ring-[#03a9f4]/30 hover:ring-[#03a9f4]' : ''}`}
-                      onClick={() => isDemoCourse && setDemoOpen(true)}
+                      
                       role={isDemoCourse ? 'button' : undefined}
                       tabIndex={isDemoCourse ? 0 : undefined}
                       onKeyDown={(event) => {
                         if (isDemoCourse && (event.key === 'Enter' || event.key === ' ')) {
                           event.preventDefault();
-                          setDemoOpen(true);
                         }
                       }}
                     >
@@ -365,9 +220,6 @@ export function FacultyPage() {
                           <span className="flex items-center gap-1 text-gray-500"><Award size={14} /> {course.level}</span>
                         </div>
                         <p className="text-[#2d8a5e] text-sm mt-3 font-medium">Career: {course.career}</p>
-                        {isDemoCourse && (
-                          <p className="mt-3 text-sm text-[#03a9f4] font-medium">Click to view training simulation</p>
-                        )}
                       </CardContent>
                     </Card>
                   );
@@ -402,7 +254,6 @@ export function FacultyPage() {
                 ))}
               </div>
             </TabsContent>
-
             <TabsContent value="equipment">
               <h2 className="text-2xl font-bold text-[#1e3a5f] mb-6">Equipment & Resources</h2>
               <Card>
@@ -411,47 +262,7 @@ export function FacultyPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-          </Tabs>
-
-          <Dialog
-            open={demoOpen}
-            onOpenChange={(open) => {
-              setDemoOpen(open);
-              setSimRunning(open);
-            }}
-          >
-            <DialogContent className="max-w-3xl max-h-[85vh] overflow-hidden bg-white">
-              <DialogHeader className="border-b pb-4">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                  <div>
-                    <DialogTitle className="text-2xl font-bold text-[#03a9f4]">RPAS Pilot Training Demo</DialogTitle>
-                    <p className="text-gray-600 mt-2">The simulation starts automatically when this modal opens. Close it anytime to stop.</p>
-                  </div>
-                  <DialogClose className="btn-secondary self-start">Close</DialogClose>
-                </div>
-              </DialogHeader>
-              <div className="p-4">
-                <div className="rounded-3xl overflow-hidden border border-slate-200 bg-slate-950 relative">
-                  <canvas ref={canvasRef} className="w-full h-[320px] block" />
-                  {!simRunning && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-slate-950/70 text-white text-sm font-medium">
-                      Click "Open" again to start the simulation.
-                    </div>
-                  )}
-                </div>
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-gray-700 flex-1">The demo is a live canvas animation of a drone inspection route. It begins immediately when the modal opens.</p>
-                  <button
-                    type="button"
-                    onClick={() => setSimRunning(true)}
-                    className="btn-primary"
-                  >
-                    Start Simulation
-                  </button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          </Tabs>        
         </div>
       </section>
     </div>
