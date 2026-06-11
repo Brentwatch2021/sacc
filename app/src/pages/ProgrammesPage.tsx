@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-//import { SolarPanel, HardHat, Sprout, Plane, GraduationCap, Users, Sparkles, ArrowRight, BookOpen, Clock, Award } from 'lucide-react';
+import { ArrowRight, BookOpen, Clock, Award } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+// SolarPanel, HardHat, Sprout, Plane, GraduationCap, Users, Sparkles, 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { ClassDto } from '@/data/types';
 import { getClasses } from '@/services/classService';
