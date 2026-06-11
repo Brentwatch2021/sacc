@@ -143,7 +143,7 @@ export function ProgrammesPage() {
           border-radius: 32px;
           background:
             radial-gradient(circle at 50% 30%, #fff176 0 8%, transparent 23%),
-            linear-gradient(135deg, #00c6ff, #7b2ff7 55%, #ff4ecd);
+            linear-gradient(135deg, #00c6ff, #00ff00 55%, #cf6005);
           box-shadow: 0 25px 60px #0004;
           font-family: system-ui, sans-serif;
           perspective: 900px;
@@ -207,7 +207,7 @@ export function ProgrammesPage() {
         .orbit span:nth-child(3) {
           bottom: -7px;
           left: 123px;
-          color: #ff4ecd;
+          color: #00ff00;
         }
 
         .orbit span:nth-child(4) {
@@ -347,14 +347,6 @@ export function ProgrammesPage() {
             <div className="stand"></div>
             <div className="base"></div>
           </div>
-
-          <div className="text">
-            Charging solar data...
-          </div>
-        </div>
-
-        <div className="error-message">
-          Failed to fetch
         </div>
       </div>
     </>
