@@ -14,6 +14,7 @@ import { ContactPage } from './pages/ContactPage';
 import { ApplyPage } from './pages/ApplyPage';
 import { PortalPage } from './pages/PortalPage';
 import './index.css';
+import { SubjectDetailPage } from './pages/SubjectDetailPage';
 
 function App() {
   return (
@@ -25,13 +26,14 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/programmes" element={<ProgrammesPage />} />
-          <Route path="/faculty/:slug" element={<FacultyPage />} />
+          <Route path="/faculty/:slug/:id" element={<FacultyPage />} />
           <Route path="/admissions" element={<AdmissionsPage />} />
           <Route path="/partnerships" element={<PartnershipsPage />} />
           <Route path="/investors" element={<InvestorsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/apply" element={<ApplyPage />} />
           <Route path="/portal/:type" element={<PortalPage />} />
+          <Route path="/subjects/:subjectId" element={<SubjectDetailPage />} />
         </Routes>
       </main>
       <Footer />

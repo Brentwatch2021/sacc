@@ -7,101 +7,6 @@ import type { ClassDto } from '@/data/types';
 import { getClasses } from '@/services/classService';
 import { useEffect, useState } from 'react';
 
-
-// const faculties = [
-//   {
-//     id: 'renewable',
-//     slug: 'renewable-energy-electrical-engineering',
-//     icon: SolarPanel,
-//     title: 'Renewable Energy & Electrical Engineering',
-//     shortTitle: 'Renewable Energy',
-//     description: 'Powering Africa\'s green transition with practical skills in solar, wind, and hydro systems.',
-//     color: '#2d8a5e',
-//     image: '/solar-workshop.jpg',
-//     courses: 13,
-//     duration: '6 Months - 2 Years',
-//     levels: 'NQF Level 3-5',
-//   },
-//   {
-//     id: 'engineering',
-//     slug: 'engineering-technical-trades',
-//     icon: HardHat,
-//     title: 'Engineering & Technical Trades',
-//     shortTitle: 'Engineering',
-//     description: 'Hands-on skills for the built environment and industrial sectors.',
-//     color: '#1e3a5f',
-//     image: '/plumbing-workshop.jpg',
-//     courses: 7,
-//     duration: '3 Months - 1 Year',
-//     levels: 'NQF Level 2-5',
-//   },
-//   {
-//     id: 'agriculture',
-//     slug: 'agriculture-environment-natural-resources',
-//     icon: Sprout,
-//     title: 'Agriculture, Environment & Natural Resources',
-//     shortTitle: 'Agriculture',
-//     description: 'Sustainable food production and environmental stewardship in the Cape Winelands.',
-//     color: '#8bc34a',
-//     image: '/vineyard-training.jpg',
-//     courses: 8,
-//     duration: '3 Months - 1 Year',
-//     levels: 'NQF Level 2-4',
-//   },
-//   {
-//     id: 'aviation',
-//     slug: 'aviation-robotics-drones',
-//     icon: Plane,
-//     title: 'Aviation & Robotics (Drones)',
-//     shortTitle: 'Aviation & Drones',
-//     description: 'Intelligent aerial systems for agriculture, security, and mapping.',
-//     color: '#03a9f4',
-//     image: '/drone-training.jpg',
-//     courses: 2,
-//     duration: '6 Months - 1 Year',
-//     levels: 'NQF Level 4',
-//   },
-//   {
-//     id: 'education',
-//     slug: 'education-training-development',
-//     icon: GraduationCap,
-//     title: 'Education, Training & Development',
-//     shortTitle: 'Education',
-//     description: 'Empowering the next generation of educators and trainers.',
-//     color: '#9c27b0',
-//     image: '/library.jpg',
-//     courses: 3,
-//     duration: '6 Months - 1 Year',
-//     levels: 'NQF Level 4-5',
-//   },
-//   {
-//     id: 'social',
-//     slug: 'social-community-development',
-//     icon: Users,
-//     title: 'Social & Community Development',
-//     shortTitle: 'Social Development',
-//     description: 'Building capable professionals for community upliftment.',
-//     color: '#ff5722',
-//     image: '/students-diverse.jpg',
-//     courses: 2,
-//     duration: '6 Months - 1 Year',
-//     levels: 'NQF Level 4-5',
-//   },
-//   {
-//     id: 'lifestyle',
-//     slug: 'lifestyle-services',
-//     icon: Sparkles,
-//     title: 'Lifestyle & Services',
-//     shortTitle: 'Lifestyle',
-//     description: 'Personal service professionals with practical, high-demand career paths.',
-//     color: '#e91e63',
-//     image: '/hero-campus.jpg',
-//     courses: 2,
-//     duration: '6 Months - 1 Year',
-//     levels: 'NQF Level 4',
-//   },
-// ];
-
 export function ProgrammesPage() {
 
   const [classes, setClasses] = useState<ClassDto[]>([]);
@@ -615,11 +520,11 @@ export function ProgrammesPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {classes.map((faculty) => (
-              <Link 
-                key={faculty.Id} 
-                to={`/faculty/${faculty.Slug}`}
-                className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-100"
-              >
+                <Link
+                    key={faculty.Id}
+                    to={`/faculty/${faculty.Slug}/${faculty.Id}`}
+                    className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-gray-100"
+                >
                 <div className="h-48 overflow-hidden relative">
                   <img 
                     src={faculty.Image} 

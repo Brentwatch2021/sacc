@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 //import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useEffect, useState } from 'react';
 
 const allCourses: Record<string, any[]> = {
   'renewable-energy-electrical-engineering': [
@@ -23,13 +24,13 @@ const allCourses: Record<string, any[]> = {
     { code: '94701', title: 'Instrument Mechanician', career: 'Industrial instrumentation technician', desc: 'Calibrates and maintains measurement instruments in industry.', duration: '1 Year', level: 'NQF Level 4' },
   ],
   'engineering-technical-trades': [
-    { code: '91782', title: 'Plumber', career: 'Licensed plumbing technician', desc: 'Installs and repairs piping systems.', duration: '1 Year', level: 'NQF Level 4' },
-    { code: '91788', title: 'Purchasing Officer', career: 'Procurement officer', desc: 'Manages sourcing and purchasing of goods.', duration: '6 Months', level: 'NQF Level 4' },
-    { code: '91789', title: 'Retail Manager / Store Manager', career: 'Retail operations manager', desc: 'Oversees daily operations in retail environments.', duration: '1 Year', level: 'NQF Level 4' },
-    { code: '93544', title: 'Supply and Distribution Manager', career: 'Logistics & warehouse manager', desc: 'Coordinates inventory, shipping, and supply chain operations.', duration: '1 Year', level: 'NQF Level 5' },
-    { code: '119264', title: 'E-Waste Operations Controller', career: 'E-waste recycling & green tech handler', desc: 'Manages disposal and recycling of electronic waste.', duration: '6 Months', level: 'NQF Level 4' },
-    { code: '88895', title: 'Packaging Operator', career: 'Packaging line operator', desc: 'Operates machinery for product packaging.', duration: '3 Months', level: 'NQF Level 2' },
-    { code: '96368', title: 'Clearing and Forwarding Agent', career: 'Customs & trade documentation specialist', desc: 'Handles import/export documentation and customs clearance.', duration: '1 Year', level: 'NQF Level 4' },
+    
+    
+    
+    
+    
+    
+    
   ],
   'agriculture-environment-natural-resources': [
     { code: '104904', title: 'Aquaculture Farm Worker', career: 'Fish farm assistant', desc: 'Assists with daily tasks on aquaculture farms.', duration: '3 Months', level: 'NQF Level 2' },
@@ -127,34 +128,42 @@ const facultyInfo: Record<string, any> = {
 };
 
 export function FacultyPage() {
-  const { slug } = useParams<{ slug: string }>();
+  const { slug, id } = useParams<{ slug: string; id: string }>();
   const info = facultyInfo[slug || ''];
   const courses = allCourses[slug || ''] || [];
   
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [subjectsLoading, setSubjectsLoading] = useState(false);
+  const [subjectsError, setSubjectsError] = useState<string | null>(null);
 
-// const [faculties, setFaculties] = useState<ClassDto[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    if (!id) return;
 
-//   useEffect(() => {
-//     getFaculties()
-//       .then(setFaculties)
-//       .catch((errr) => setError(errr.message))
-//       .finally(() => setLoading(false));
-//   }, []);
+    setSubjectsLoading(true);
+    setSubjectsError(null);
 
-//   useEffect(() => {
-//     console.log('Faculties loaded:', faculties);
-//   }, [faculties]);
+    
+    fetch(`https://studentportaltest-a9afaje8c3hjctap.southafricanorth-01.azurewebsites.net/api/classes/${id}/subjects`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch subjects');
+        }
 
-//   if (loading) return <div>Loading Faculties...</div>;
-//   if (error) return <div>Error: {error}</div>;
+        return res.json();
+      })
+      .then(setSubjects)
+      .catch((err) => setSubjectsError(err.message))
+      .finally(() => setSubjectsLoading(false));
+  }, [id]);
 
-  
+  //const displayCourses = subjects.length > 0 ? subjects : courses;
 
-      
   if (!info) {
-    return <div className="py-20 text-center"><h1 className="text-2xl font-bold">Faculty not found</h1></div>;
+    return (
+      <div className="py-20 text-center">
+        <h1 className="text-2xl font-bold">Faculty not found</h1>
+      </div>
+    );
   }
 
   return (
@@ -185,46 +194,66 @@ export function FacultyPage() {
               <div className="mb-8 flex justify-between items-center">
                 <div>
                   <h2 className="text-2xl font-bold text-[#1e3a5f]">Available Qualifications</h2>
-                  <p className="text-gray-600">{courses.length} courses available</p>
+                  <p className="text-gray-600">{subjects.length} courses available</p>
                 </div>
                 <Link to="/apply" className="btn-primary">Apply Now</Link>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
-                {courses.map((course, i) => {
-                  const isDemoCourse = course.title === 'RPAS Pilot';
-                  return (
-                    <Card
-                      key={i}
-                      className={`hover:shadow-lg transition-shadow ${isDemoCourse ? 'cursor-pointer ring-1 ring-[#03a9f4]/30 hover:ring-[#03a9f4]' : ''}`}
-                      
-                      role={isDemoCourse ? 'button' : undefined}
-                      tabIndex={isDemoCourse ? 0 : undefined}
-                      onKeyDown={(event) => {
-                        if (isDemoCourse && (event.key === 'Enter' || event.key === ' ')) {
-                          event.preventDefault();
-                        }
-                      }}
-                    >
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <Badge className="mb-2" style={{ backgroundColor: info.color }}>{course.code}</Badge>
-                            <CardTitle className="text-lg">{course.title}</CardTitle>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-gray-600 text-sm mb-3">{course.desc}</p>
-                        <div className="flex flex-wrap gap-2 text-sm">
-                          <span className="flex items-center gap-1 text-gray-500"><Clock size={14} /> {course.duration}</span>
-                          <span className="flex items-center gap-1 text-gray-500"><Award size={14} /> {course.level}</span>
-                        </div>
-                        <p className="text-[#2d8a5e] text-sm mt-3 font-medium">Career: {course.career}</p>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
+  {subjects.map((course, i) => (
+    <Link
+      key={course.Id ?? i}
+      to={`/subjects/${course.Id}`}
+      className="group block"
+    >
+      <Card className="h-full cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] border border-gray-100 group-hover:border-[#2d8a5e]/40">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div>
+              <Badge
+                className="mb-2 transition-transform duration-300 group-hover:scale-110"
+                style={{ backgroundColor: info.color }}
+              >
+                {course.Code}
+              </Badge>
+
+              <CardTitle className="text-lg group-hover:text-[#2d8a5e] transition-colors">
+                {course.Title}
+              </CardTitle>
+            </div>
+
+            <span className="text-[#2d8a5e] opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-semibold">
+              View →
+            </span>
+          </div>
+        </CardHeader>
+
+        <CardContent>
+          <p className="text-gray-600 text-sm mb-3">
+            {course.Description}
+          </p>
+
+          <div className="flex flex-wrap gap-2 text-sm">
+            <span className="flex items-center gap-1 text-gray-500">
+              <Clock size={14} /> {course.Duration}
+            </span>
+
+            <span className="flex items-center gap-1 text-gray-500">
+              <Award size={14} /> {course.Level}
+            </span>
+          </div>
+
+          <p className="text-[#2d8a5e] text-sm mt-3 font-medium">
+            Career: {course.Career}
+          </p>
+
+          <div className="mt-4 flex items-center text-[#2d8a5e] font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300">
+            Click to view qualification details →
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  ))}
+</div>
             </TabsContent>
 
             <TabsContent value="facilities">
