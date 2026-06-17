@@ -35,7 +35,7 @@ export default function OAuthDemo() {
   }
 
   return (
-    <div style={{ padding: 40 }}>
+    <div style={{ padding: 40, margin: "0 auto", maxWidth: 800 }}>
       <h1>Client OAuth Demo - Expected to Break</h1>
 
       <p>
@@ -44,7 +44,7 @@ export default function OAuthDemo() {
       </p>
 
       {!accessToken && (
-        <a href={loginUrl}>
+        <a href={loginUrl} className="btn-primary padding-40">
           Login directly with Zoho
         </a>
       )}
