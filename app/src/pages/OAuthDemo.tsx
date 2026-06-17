@@ -153,7 +153,107 @@ export default function OAuthDemo() {
   </div>
 
 </section>
-```
+<section className="bg-slate-50 border-t border-slate-200 py-12 px-6">
+  <div className="max-w-5xl mx-auto">
+
+    <div className="text-center mb-10">
+      <h2 className="text-3xl font-bold text-slate-900 mb-3">
+        💰 Cost & Hosting Overview
+      </h2>
+      <p className="text-slate-600 text-lg">
+        A practical solution that keeps monthly costs extremely low while remaining scalable.
+      </p>
+    </div>
+
+    <div className="grid md:grid-cols-2 gap-6">
+
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h3 className="text-xl font-semibold mb-4 text-slate-900">
+          ⚡ Cloudflare Worker
+        </h3>
+
+        <ul className="space-y-3 text-slate-700">
+          <li>✅ Up to 100,000 requests per day on the free tier</li>
+          <li>✅ Expected usage is well below free limits</li>
+          <li>✅ Handles communication with Zoho APIs</li>
+          <li>✅ Fast, secure and globally distributed</li>
+          <li>✅ Paid plan available later if growth requires it</li>
+        </ul>
+
+        <div className="mt-5 p-4 bg-green-50 rounded-lg border border-green-200">
+          <p className="font-semibold text-green-700">
+            Estimated Cost: R0/month initially
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h3 className="text-xl font-semibold mb-4 text-slate-900">
+          📁 Zoho WorkDrive Storage
+        </h3>
+
+        <ul className="space-y-3 text-slate-700">
+          <li>✅ Stores student documents securely</li>
+          <li>✅ No custom file server required</li>
+          <li>✅ Integrated with the Zoho ecosystem</li>
+          <li>✅ Easy document management</li>
+          <li>✅ Scales as student numbers grow</li>
+        </ul>
+
+        <div className="mt-5 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <p className="font-semibold text-blue-700">
+            Storage handled through Zoho WorkDrive
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div className="mt-8 bg-indigo-600 rounded-2xl p-8 text-white">
+      <h3 className="text-2xl font-bold mb-4">
+        🚀 Recommended Solution
+      </h3>
+
+      <div className="grid md:grid-cols-3 gap-6 mb-6">
+
+        <div className="text-center">
+          <div className="text-4xl mb-2">🌐</div>
+          <p className="font-semibold">Website</p>
+          <p className="text-indigo-100 text-sm">
+            Student Portal
+          </p>
+        </div>
+
+        <div className="text-center">
+          <div className="text-4xl mb-2">⚡</div>
+          <p className="font-semibold">Cloudflare Worker</p>
+          <p className="text-indigo-100 text-sm">
+            Secure API Layer
+          </p>
+        </div>
+
+        <div className="text-center">
+          <div className="text-4xl mb-2">📁</div>
+          <p className="font-semibold">Zoho WorkDrive</p>
+          <p className="text-indigo-100 text-sm">
+            Student Documents
+          </p>
+        </div>
+
+      </div>
+
+      <div className="bg-white/10 rounded-xl p-5">
+        <p className="text-lg leading-relaxed">
+          For the expected number of students and document uploads, this solution provides
+          a reliable and scalable platform while keeping ongoing infrastructure costs
+          extremely low. The Cloudflare Worker is expected to remain within the free tier
+          for normal usage, while Zoho WorkDrive manages document storage efficiently.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 
 
