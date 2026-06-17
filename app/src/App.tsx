@@ -15,6 +15,7 @@ import { ApplyPage } from './pages/ApplyPage';
 import { PortalPage } from './pages/PortalPage';
 import './index.css';
 import { SubjectDetailPage } from './pages/SubjectDetailPage';
+import OAuthDemo from './pages/OAuthDemo';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/apply" element={<ApplyPage />} />
           <Route path="/portal/:type" element={<PortalPage />} />
           <Route path="/subjects/:subjectId" element={<SubjectDetailPage />} />
+          <Route path="/oauth-demo" element={<OAuthDemo />} />
         </Routes>
       </main>
       <Footer />
