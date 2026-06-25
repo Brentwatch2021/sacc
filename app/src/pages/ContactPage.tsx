@@ -24,12 +24,13 @@ const departments = [
 ];
 
 export function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const [submitted, setSubmitted] = useState(false);
+const [department, setDepartment] = useState("");
+const handleSubmit = () => {
+  setTimeout(() => {
     setSubmitted(true);
-  };
+  }, 800);
+};
 
   return (
     <div className="bg-white">
@@ -68,62 +69,83 @@ export function ContactPage() {
               <h2 className="text-2xl font-bold text-[#1e3a5f] mb-6">Send Us a Message</h2>
               
               {submitted ? (
-                <Card className="bg-[#2d8a5e]/10 border-[#2d8a5e]">
-                  <CardContent className="p-8 text-center">
-                    <div className="w-16 h-16 rounded-full bg-[#2d8a5e] text-white flex items-center justify-center mx-auto mb-4">
-                      <Send className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-xl font-bold text-[#1e3a5f] mb-2">Message Sent!</h3>
-                    <p className="text-gray-600">Thank you for contacting us. We will respond within 24-48 hours.</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>First Name *</Label>
-                      <Input required placeholder="Your first name" />
-                    </div>
-                    <div>
-                      <Label>Last Name *</Label>
-                      <Input required placeholder="Your last name" />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <Label>Email Address *</Label>
-                    <Input type="email" required placeholder="your@email.com" />
-                  </div>
-                  
-                  <div>
-                    <Label>Phone Number</Label>
-                    <Input placeholder="+27 XX XXX XXXX" />
-                  </div>
-                  
-                  <div>
-                    <Label>Department *</Label>
-                    <Select required>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select department" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {departments.map((dept, i) => (
-                          <SelectItem key={i} value={dept.email}>{dept.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <Label>Message *</Label>
-                    <Textarea required placeholder="How can we help you?" rows={5} />
-                  </div>
-                  
-                  <button type="submit" className="btn-primary w-full">
-                    <Send className="w-4 h-4 inline mr-2" /> Send Message
-                  </button>
-                </form>
-              )}
+  <Card className="bg-[#2d8a5e]/10 border-[#2d8a5e]">
+    <CardContent className="p-8 text-center">
+      <div className="w-16 h-16 rounded-full bg-[#2d8a5e] text-white flex items-center justify-center mx-auto mb-4">
+        <Send className="w-8 h-8" />
+      </div>
+      <h3 className="text-xl font-bold text-[#1e3a5f] mb-2">
+        Message Sent!
+      </h3>
+      <p className="text-gray-600">
+        Thank you for contacting us. We will respond within 24-48 hours.
+      </p>
+    </CardContent>
+  </Card>
+) : (
+  <form
+    action="https://forms.zohopublic.com/ssactportal1/form/SendusaMessage/formperma/kG8YX74RC-IG3lwD8Az6m1IZt5ojC5FrwnBki6qPoQ8/htmlRecords/submit"
+    method="POST"
+    target="zohoHiddenFrame"
+    acceptCharset="UTF-8"
+    encType="multipart/form-data"
+    onSubmit={handleSubmit}
+    className="space-y-4"
+  >
+    <iframe name="zohoHiddenFrame" className="hidden" />
+
+    <input type="hidden" name="zf_referrer_name" value="" />
+    <input type="hidden" name="zf_redirect_url" value="" />
+    <input type="hidden" name="zc_gad" value="" />
+
+    <Input name="Name_First" required placeholder="Your first name" />
+    <Input name="Name_Last" required placeholder="Your last name" />
+    <Input name="Email" type="email" required placeholder="your@email.com" />
+    <Input name="PhoneNumber_countrycode" placeholder="+27 XX XXX XXXX" />
+
+    <div>
+  <Label>Department *</Label>
+
+  <input
+    type="hidden"
+    name="Dropdown"
+    value={department}
+  />
+
+  <Select
+    required
+    value={department}
+    onValueChange={setDepartment}
+  >
+    <SelectTrigger>
+      <SelectValue placeholder="Select department" />
+    </SelectTrigger>
+
+    <SelectContent>
+      {departments.map((dept, i) => (
+        <SelectItem
+          key={i}
+          value={dept.name}
+        >
+          {dept.name}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
+
+    <Textarea
+      name="MultiLine"
+      required
+      placeholder="How can we help you?"
+      rows={5}
+    />
+
+    <button type="submit" className="btn-primary w-full">
+      <Send className="w-4 h-4 inline mr-2" /> Send Message
+    </button>
+  </form>
+)}
             </div>
 
             {/* Departments & Map */}

@@ -13,14 +13,37 @@ const faculties = [
 ];
 
 function NewsletterSignup() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append("Email", email);
+    formData.append("zf_referrer_name", "");
+    formData.append("zf_redirect_url", "");
+    formData.append("zc_gad", "");
+
+    try {
+      await fetch(
+        "https://forms.zohopublic.com/ssactportal1/form/SubscribetoNewsletter/formperma/2UdPiDhLAXdxZuJQviAeCPuAD8mlLaf6gNAeYgDHCz4/htmlRecords/submit",
+        {
+          method: "POST",
+          body: formData,
+          mode: "no-cors",
+        }
+      );
+
       setSubmitted(true);
-      setEmail('');
+      setEmail("");
+    } catch (error) {
+      console.error("Newsletter subscription failed:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,12 +62,19 @@ function NewsletterSignup() {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
+        maxLength={255}
         required
+        placeholder="Enter your email"
         className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/50 focus:outline-none focus:border-[#2d8a5e]"
       />
-      <button type="submit" className="bg-[#2d8a5e] hover:bg-[#247a4e] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-        <Send size={14} /> Subscribe
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-[#2d8a5e] hover:bg-[#247a4e] disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+      >
+        <Send size={14} />
+        {loading ? "Submitting..." : "Subscribe"}
       </button>
     </form>
   );
@@ -127,6 +157,12 @@ export function Footer() {
           <p className="text-[#c9a227] text-sm">Part of the Cape Winelands University Group</p>
         </div>
       </div>
+
+<iframe aria-label='upload test' className="height:500px;width:99%;border:none;" src='https://forms.zohopublic.com/wirrem1990gm1/form/uploadtest/formperma/hXGRZ35qL5XY2H9ib7jFwrBBTMtZwX5vcco10hguBNc' >
+</iframe>
+
+
+
     </footer>
   );
 }

@@ -30,17 +30,23 @@ const qualifications = [
 
 export function ApplyPage() {
   const [step, setStep] = useState(1);
-  const [submitted, setSubmitted] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState('');
+  const [leadSource, setLeadSource] = useState("");
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [selectedCourseCode, setSelectedCourseCode] = useState('');
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [detailCourse, setDetailCourse] = useState<Course | null>(null);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-  };
+  const [dateValue, setDateValue] = useState("");
+  const [highestQualification, setHighestQualification] = useState("");
+  const [yearCompleted, setYearCompleted] = useState("");
+  const [fileNames, setFileNames] = useState({
+  cv: "",
+  id: "",
+  academic: "",
+  photo: "",
+});
+const submitted =
+  new URLSearchParams(window.location.search).get("submitted") === "true";
 
   const getCoursesForFaculty = (facultyId: string) => {
     return allCourses[facultyId as keyof typeof allCourses] || [];
@@ -69,6 +75,15 @@ export function ApplyPage() {
       document.getElementById('course-selection')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const formatZohoDate = (value: string) => {
+  if (!value) return "";
+
+  const [year, month, day] = value.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  return `${day}-${months[Number(month) - 1]}-${year}`;
+};
 
   if (submitted) {
     return (
@@ -132,64 +147,96 @@ export function ApplyPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            {step === 1 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="w-5 h-5 text-[#2d8a5e]" />
-                    Personal Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>First Name *</Label>
-                      <Input required placeholder="Enter your first name" />
-                    </div>
-                    <div>
-                      <Label>Last Name *</Label>
-                      <Input required placeholder="Enter your last name" />
-                    </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>ID Number / Passport *</Label>
-                      <Input required placeholder="South African ID or Passport number" />
-                    </div>
-                    <div>
-                      <Label>Date of Birth *</Label>
-                      <Input type="date" required />
-                    </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>Email Address *</Label>
-                      <Input type="email" required placeholder="your@email.com" />
-                    </div>
-                    <div>
-                      <Label>Cell Phone Number *</Label>
-                      <Input required placeholder="+27 XX XXX XXXX" />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <Label>Physical Address *</Label>
-                    <Textarea required placeholder="Enter your full residential address" rows={3} />
-                  </div>
-                  
-                  <div className="flex justify-end">
-                    <button type="button" onClick={() => setStep(2)} className="btn-primary">
-                      Next: Programme Selection
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
 
-            {step === 2 && (
+<form
+  action="https://forms.zohopublic.com/ssactportal1/form/Enroll/formperma/mKlD0JfamjLrRDvMr475Xm2nwruWyw6O8HjKWx9_LXw/htmlRecords/submit"
+  method="POST"
+  encType="multipart/form-data"
+  acceptCharset="UTF-8"
+>
+
+
+   <input type="hidden" name="zf_referrer_name" value="" />
+   <input type="hidden" name="zf_redirect_url" value="https://ssac.tech/" />
+   <input type="hidden" name="zc_gad" value="" />
+          {/* <form onSubmit={handleSubmit}> */}
+<div className={step === 1 ? "block" : "hidden"}>
+  <Card>
+    <CardHeader>
+      <CardTitle className="flex items-center gap-2">
+        <User className="w-5 h-5 text-[#2d8a5e]" />
+        Personal Information
+      </CardTitle>
+    </CardHeader>
+
+    <CardContent className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4">
+        <div>
+          <Label>First Name *</Label>
+          <Input name="Name_First" required placeholder="Enter your first name" />
+        </div>
+        <div>
+          <Label>Last Name *</Label>
+          <Input name="Name_Last" required placeholder="Enter your last name" />
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <div>
+          <Label>ID Number / Passport *</Label>
+          <Input name="SingleLine" required placeholder="South African ID or Passport number" />
+        </div>
+        <div>
+          <Label>Date of Birth *</Label>
+          <Input
+            type="date"
+              value={dateValue}
+          onChange={(e) => setDateValue(e.target.value)}
+          />
+
+<input
+  type="hidden"
+  name="Date"
+  value={formatZohoDate(dateValue)}
+/>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <div>
+          <Label>Email Address *</Label>
+          <Input name="Email" type="email" required placeholder="your@email.com" />
+        </div>
+        <div>
+          <Label>Cell Phone Number *</Label>
+          <Input name="PhoneNumber_countrycode" required placeholder="+27 XX XXX XXXX" />
+        </div>
+      </div>
+
+      <div>
+        <Label>Physical Address *</Label>
+        <Textarea
+          name="MultiLine"
+          required
+          placeholder="Enter your full residential address"
+          rows={3}
+        />
+      </div>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => setStep(2)}
+          className="btn-primary"
+        >
+          Next: Programme Selection
+        </button>
+      </div>
+    </CardContent>
+  </Card>
+</div>
+
+            <div className={step === 2 ? "block" : "hidden"}>
               <Card id="course-selection">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -248,7 +295,9 @@ export function ApplyPage() {
                   </div>
                   
                   {selectedFaculty && (
+                    
                     <div>
+                      <input type="hidden" name="SingleLine1" value={selectedFaculty}/>
                       <Label>Available Qualifications *</Label>
                       <p className="text-sm text-gray-500 mb-3">
                         Click "View Details" to see full qualification information, or select a programme to apply.
@@ -306,26 +355,53 @@ export function ApplyPage() {
                           </div>
                         ))}
                       </div>
+                      
                     </div>
+                    
                   )}
-                  
+                  <input type="hidden" name="SingleLine2" value={selectedCourse?.title}/>
                   <div>
-                    <Label>Highest Qualification *</Label>
-                    <Select required>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your highest qualification" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {qualifications.map((q) => (
-                          <SelectItem key={q.value} value={q.value}>{q.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+  <Label>Highest Qualification *</Label>
+
+  <Select
+    required
+    onValueChange={(value) => {
+      setHighestQualification(value);
+    }}
+  >
+    <SelectTrigger>
+      <SelectValue placeholder="Select your highest qualification" />
+    </SelectTrigger>
+
+    <SelectContent>
+      {qualifications.map((q) => (
+        <SelectItem
+          key={q.value}
+          value={q.label}
+        >
+          {q.label}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+
+  <input
+    type="hidden"
+    name="SingleLine3"
+    value={highestQualification}
+  />
+</div>
                   
                   <div>
                     <Label>Year Completed *</Label>
-                    <Input type="number" min="1990" max="2026" required placeholder="e.g., 2025" />
+                    <Input type="number" min="1990" max={new Date().getFullYear()} value={yearCompleted} onChange={(e) => setYearCompleted(e.target.value)}
+/>
+
+<input
+  type="hidden"
+  name="SingleLine4"
+  value={yearCompleted}
+/>
                   </div>
                   
                   <div className="flex justify-between">
@@ -343,9 +419,9 @@ export function ApplyPage() {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            </div>
 
-            {step === 3 && (
+            <div className={step === 3 ? "block" : "hidden"}>
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -385,32 +461,152 @@ export function ApplyPage() {
                     </ul>
                   </div>
                   
+                  <input
+  id="cv-upload"
+  type="file"
+  name="FileUpload"
+  accept=".pdf,.jpg,.jpeg,.png"
+  className="hidden"
+  onChange={(e) =>
+    setFileNames((prev) => ({
+      ...prev,
+      cv: e.target.files?.[0]?.name || "",
+    }))
+  }
+/>
+
+<label
+  htmlFor="cv-upload"
+  className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#2d8a5e] transition-colors cursor-pointer block"
+>
+  <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+  <p className="text-gray-600">
+    {fileNames.cv || "Click to upload CV"}
+  </p>
+  <p className="text-sm text-gray-400">PDF, JPG, or PNG max 5MB</p>
+</label>
+
                   <div>
-                    <Label>Upload Documents</Label>
-                    <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#2d8a5e] transition-colors cursor-pointer">
-                      <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-600">Click to upload or drag and drop files here</p>
-                      <p className="text-sm text-gray-400">PDF, JPG, or PNG (max 5MB each)</p>
-                    </div>
-                  </div>
+  <Label htmlFor="id-upload">Upload ID/Passport</Label>
+
+  <input
+    id="id-upload"
+    type="file"
+    name="FileUpload1"
+    accept=".pdf,.jpg,.jpeg,.png"
+    className="hidden"
+    onChange={(e) =>
+      setFileNames((prev) => ({
+        ...prev,
+        id: e.target.files?.[0]?.name || "",
+      }))
+    }
+  />
+
+  <label
+    htmlFor="id-upload"
+    className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#2d8a5e] transition-colors cursor-pointer block"
+  >
+    <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+    <p className="text-gray-600">
+      {fileNames.id || "Click to upload ID/Passport"}
+    </p>
+    <p className="text-sm text-gray-400">
+      PDF, JPG, or PNG (max 5MB)
+    </p>
+  </label>
+</div>
+
+                  <div>
+  <Label htmlFor="academic-upload">Upload Academic Results</Label>
+
+  <input
+    id="academic-upload"
+    type="file"
+    name="FileUpload2"
+    accept=".pdf,.jpg,.jpeg,.png"
+    className="hidden"
+    onChange={(e) =>
+      setFileNames((prev) => ({
+        ...prev,
+        academic: e.target.files?.[0]?.name || "",
+      }))
+    }
+  />
+
+  <label
+    htmlFor="academic-upload"
+    className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#2d8a5e] transition-colors cursor-pointer block"
+  >
+    <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+    <p className="text-gray-600">
+      {fileNames.academic || "Click to upload Academic Results"}
+    </p>
+    <p className="text-sm text-gray-400">
+      PDF, JPG, or PNG (max 5MB)
+    </p>
+  </label>
+</div>
+
+                  <div>
+  <Label htmlFor="photo-upload">Upload ID Photo</Label>
+
+  <input
+    id="photo-upload"
+    type="file"
+    name="FileUpload3"
+    accept=".pdf,.jpg,.jpeg,.png"
+    className="hidden"
+    onChange={(e) =>
+      setFileNames((prev) => ({
+        ...prev,
+        photo: e.target.files?.[0]?.name || "",
+      }))
+    }
+  />
+
+  <label
+    htmlFor="photo-upload"
+    className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-[#2d8a5e] transition-colors cursor-pointer block"
+  >
+    <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+    <p className="text-gray-600">
+      {fileNames.photo || "Click to upload ID Photo"}
+    </p>
+    <p className="text-sm text-gray-400">
+      PDF, JPG, or PNG (max 5MB)
+    </p>
+  </label>
+</div>
                   
                   <div>
-                    <Label>How did you hear about us?</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an option" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="social">Social Media</SelectItem>
-                        <SelectItem value="friend">Friend/Family</SelectItem>
-                        <SelectItem value="school">School/Career Counsellor</SelectItem>
-                        <SelectItem value="online">Online Search</SelectItem>
-                        <SelectItem value="event">Open Day/Event</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
+  <Label>How did you hear about us?</Label>
+
+  <Select onValueChange={(value) => setLeadSource(value)}>
+    <SelectTrigger>
+      <SelectValue placeholder="Select an option" />
+    </SelectTrigger>
+
+    <SelectContent>
+      <SelectItem value="Social Media">Social Media</SelectItem>
+      <SelectItem value="Friend/Family">Friend/Family</SelectItem>
+      <SelectItem value="School/Career Counsellor">
+        School/Career Counsellor
+      </SelectItem>
+      <SelectItem value="Online Search">Online Search</SelectItem>
+      <SelectItem value="Open Day/Event">Open Day/Event</SelectItem>
+      <SelectItem value="Other">Other</SelectItem>
+    </SelectContent>
+  </Select>
+
+  <input
+    type="hidden"
+    name="SingleLine5"
+    value={leadSource}
+  />
+</div>
+
+
                   <div className="flex items-start gap-2 p-4 bg-[#c9a227]/10 rounded-lg">
                     <AlertCircle className="w-5 h-5 text-[#c9a227] flex-shrink-0 mt-0.5" />
                     <div className="text-sm text-gray-700">
@@ -436,7 +632,7 @@ export function ApplyPage() {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            </div>
           </form>
 
           {/* Help */}
